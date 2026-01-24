@@ -7,7 +7,7 @@ const globalForPrisma = globalThis as unknown as {
 
 // Create Neon adapter with connection string
 const connectionString = process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL || '';
-const adapter = new PrismaNeon(connectionString);
+const adapter = new PrismaNeon({ connectionString });
 
 export const prisma =
   globalForPrisma.prisma ??
