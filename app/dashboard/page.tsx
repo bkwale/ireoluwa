@@ -70,13 +70,17 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <header className="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">EngineerIQ</h1>
-            <p className="text-sm text-gray-500">T-Level Engineering Practice</p>
+            <h1 className="text-2xl font-bold text-white">EngineerIQ</h1>
+            <p className="text-sm text-blue-100">T-Level Engineering Practice</p>
           </div>
-          <Button variant="outline" onClick={handleLogout}>
+          <Button
+            variant="outline"
+            onClick={handleLogout}
+            className="bg-white text-blue-700 hover:bg-blue-50 border-2 border-white font-semibold"
+          >
             Logout
           </Button>
         </div>
@@ -86,8 +90,14 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, Ireoluwa!</h2>
-          <p className="text-gray-600">Choose a topic to start practicing</p>
+          <p className="text-lg text-gray-600">Choose a topic to start practicing</p>
         </div>
+
+        {units.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-xl text-gray-500">No topics available yet. Please contact your guardian.</p>
+          </div>
+        )}
 
         {/* Units */}
         <div className="space-y-8">
@@ -106,19 +116,19 @@ export default function DashboardPage() {
                   const problemCount = topic.problems.length;
 
                   return (
-                    <Card key={topic.id} className="hover:shadow-md transition-shadow">
-                      <CardHeader>
+                    <Card key={topic.id} className="hover:shadow-lg transition-all hover:scale-105 border-2 hover:border-blue-400">
+                      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
-                            <CardTitle className="text-lg">{topic.name}</CardTitle>
-                            <CardDescription className="mt-1">
+                            <CardTitle className="text-lg font-bold text-gray-900">{topic.name}</CardTitle>
+                            <CardDescription className="mt-1 text-gray-700">
                               {topic.description}
                             </CardDescription>
                           </div>
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${
-                            topic.difficulty === 'FOUNDATION' ? 'bg-green-100 text-green-800' :
-                            topic.difficulty === 'INTERMEDIATE' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                            topic.difficulty === 'FOUNDATION' ? 'bg-green-500 text-white' :
+                            topic.difficulty === 'INTERMEDIATE' ? 'bg-yellow-500 text-white' :
+                            'bg-red-500 text-white'
                           }`}>
                             {topic.difficulty}
                           </span>
@@ -152,11 +162,11 @@ export default function DashboardPage() {
 
                           {/* Action Button */}
                           <Button
-                            className="w-full"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold"
                             onClick={() => handlePractice(topic.id)}
                             disabled={problemCount === 0}
                           >
-                            {totalAttempts > 0 ? 'Continue Practice' : 'Start Practice'}
+                            {totalAttempts > 0 ? 'Continue Practice →' : 'Start Practice →'}
                           </Button>
                         </div>
                       </CardContent>
