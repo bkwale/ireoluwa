@@ -124,15 +124,19 @@ export default function PracticePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <header className="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Practice Mode</h1>
-            <p className="text-sm text-gray-500">
+            <h1 className="text-2xl font-bold text-white">Practice Mode</h1>
+            <p className="text-sm text-blue-100">
               Difficulty: {problem.difficulty} • Est. {problem.estimatedTime} min
             </p>
           </div>
-          <Button variant="outline" onClick={handleBackToDashboard}>
+          <Button
+            variant="outline"
+            onClick={handleBackToDashboard}
+            className="bg-white text-blue-700 hover:bg-blue-50 border-2 border-white font-semibold"
+          >
             Back to Dashboard
           </Button>
         </div>
@@ -140,13 +144,13 @@ export default function PracticePage() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Problem</CardTitle>
+        <Card className="border-2">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50">
+            <CardTitle className="text-xl text-gray-900">Problem</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 pt-6">
             {/* Question */}
-            <div className="text-lg font-medium leading-relaxed">
+            <div className="text-xl font-semibold leading-relaxed text-gray-900 bg-white p-6 rounded-lg border-2 border-blue-200">
               {problem.question}
             </div>
 
@@ -154,7 +158,7 @@ export default function PracticePage() {
             {!showResult && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="answer" className="text-sm font-medium">
+                  <label htmlFor="answer" className="text-base font-semibold text-gray-900">
                     Your Answer:
                   </label>
                   <Input
@@ -165,19 +169,21 @@ export default function PracticePage() {
                     value={userAnswer}
                     onChange={(e) => setUserAnswer(e.target.value)}
                     disabled={submitting}
+                    className="text-lg p-6 border-2"
                   />
                 </div>
                 <div className="flex gap-3">
                   <Button
                     onClick={handleSubmit}
                     disabled={!userAnswer || submitting}
-                    className="flex-1"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg py-6"
                   >
                     {submitting ? 'Submitting...' : 'Submit Answer'}
                   </Button>
                   <Button
                     variant="outline"
                     onClick={() => setShowSteps(!showSteps)}
+                    className="border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-semibold py-6"
                   >
                     {showSteps ? 'Hide' : 'Show'} Steps
                   </Button>
@@ -219,21 +225,21 @@ export default function PracticePage() {
 
             {/* Solution Steps */}
             {showSteps && problem.steps.length > 0 && (
-              <Card className="bg-blue-50 border-blue-200">
-                <CardHeader>
-                  <CardTitle className="text-base">Solution Steps</CardTitle>
+              <Card className="bg-blue-50 border-2 border-blue-300">
+                <CardHeader className="bg-blue-100">
+                  <CardTitle className="text-lg text-gray-900">Solution Steps</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <ol className="space-y-3">
+                <CardContent className="pt-4">
+                  <ol className="space-y-4">
                     {problem.steps.map((step) => (
                       <li key={step.stepNumber} className="flex gap-3">
-                        <span className="font-semibold text-blue-600">
+                        <span className="font-bold text-lg text-blue-700">
                           {step.stepNumber}.
                         </span>
                         <div>
-                          <p className="text-gray-700">{step.instruction}</p>
+                          <p className="text-base font-medium text-gray-900">{step.instruction}</p>
                           {step.formula && (
-                            <p className="text-sm text-gray-600 mt-1 font-mono">
+                            <p className="text-base text-gray-800 mt-2 font-mono bg-white p-2 rounded border">
                               {step.formula}
                             </p>
                           )}
