@@ -1,11 +1,31 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 export async function GET() {
   try {
+    // First, try to run migrations
+    try {
+      console.log('Running database migrations...');
+      await execAsync('npx prisma migrate deploy');
+      console.log('Migrations completed successfully');
+    } catch (migrationError: any) {
+      console.log('Migration warning:', migrationError.message);
+      // Continue anyway - tables might already exist
+    }
+
     // Check if database is already set up
-    const userCount = await prisma.user.count();
+    let userCount = 0;
+    try {
+      userCount = await prisma.user.count();
+    } catch (error) {
+      // Table might not exist yet, that's ok
+      console.log('Could not count users, table may not exist yet');
+    }
 
     if (userCount > 0) {
       return NextResponse.json({
@@ -49,7 +69,7 @@ export async function GET() {
     });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message, details: error },
+      { error: error.message, stack: error.stack },
       { status: 500 }
     );
   }
