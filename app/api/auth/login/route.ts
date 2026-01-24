@@ -4,20 +4,20 @@ import { createSession } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    const { username, password } = await request.json();
 
-    if (!email || !password) {
+    if (!username || !password) {
       return NextResponse.json(
-        { error: 'Email and password are required' },
+        { error: 'Username and password are required' },
         { status: 400 }
       );
     }
 
-    const user = await verifyUser(email, password);
+    const user = await verifyUser(username, password);
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Invalid email or password' },
+        { error: 'Invalid username or password' },
         { status: 401 }
       );
     }
@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
       success: true,
       user: {
         id: user.id,
+        username: user.username,
         email: user.email,
         name: user.name,
         role: user.role,

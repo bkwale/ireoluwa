@@ -9,9 +9,10 @@ async function main() {
   const guardianPassword = await bcrypt.hash('guardian123', 10);
 
   const student = await prisma.user.upsert({
-    where: { email: '[email protected]' },
+    where: { username: 'ireoluwa' },
     update: {},
     create: {
+      username: 'ireoluwa',
       email: '[email protected]',
       name: 'Ireoluwa',
       passwordHash: studentPassword,
@@ -20,9 +21,10 @@ async function main() {
   });
 
   const guardian = await prisma.user.upsert({
-    where: { email: '[email protected]' },
+    where: { username: 'admin' },
     update: {},
     create: {
+      username: 'admin',
       email: '[email protected]',
       name: 'Guardian',
       passwordHash: guardianPassword,
@@ -30,7 +32,7 @@ async function main() {
     },
   });
 
-  console.log('Created users:', { student: student.email, guardian: guardian.email });
+  console.log('Created users:', { student: student.username, guardian: guardian.username });
 
   // Create Units
   const unit4 = await prisma.unit.create({

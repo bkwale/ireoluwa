@@ -5,16 +5,18 @@ export type UserRole = 'STUDENT' | 'GUARDIAN' | 'ADMIN';
 
 export interface User {
   id: string;
+  username: string;
   email: string;
   name: string;
   role: string;
 }
 
-export async function verifyUser(email: string, password: string): Promise<User | null> {
+export async function verifyUser(username: string, password: string): Promise<User | null> {
   const user = await prisma.user.findUnique({
-    where: { email },
+    where: { username },
     select: {
       id: true,
+      username: true,
       email: true,
       name: true,
       role: true,
@@ -33,6 +35,7 @@ export async function verifyUser(email: string, password: string): Promise<User 
 
   return {
     id: user.id,
+    username: user.username,
     email: user.email,
     name: user.name,
     role: user.role,
@@ -40,6 +43,7 @@ export async function verifyUser(email: string, password: string): Promise<User 
 }
 
 export async function createUser(
+  username: string,
   email: string,
   password: string,
   name: string,
@@ -49,6 +53,7 @@ export async function createUser(
 
   const user = await prisma.user.create({
     data: {
+      username,
       email,
       name,
       passwordHash,
@@ -56,6 +61,7 @@ export async function createUser(
     },
     select: {
       id: true,
+      username: true,
       email: true,
       name: true,
       role: true,
