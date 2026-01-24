@@ -1,15 +1,8 @@
 import { NextResponse } from 'next/server';
-import { neonConfig } from '@neondatabase/serverless';
-import ws from 'ws';
-
-// Configure WebSocket for migrations
-if (typeof WebSocket === 'undefined') {
-  neonConfig.webSocketConstructor = ws;
-}
+import { Pool } from '@neondatabase/serverless';
 
 export async function GET() {
   try {
-    const { Pool } = await import('@neondatabase/serverless');
 
     const connectionString = process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL;
 
