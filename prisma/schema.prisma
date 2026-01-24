@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  passwordHash  String
+  role          String    @default("STUDENT")
+
+  enrolledAt    DateTime  @default(now())
+  targetExamDate DateTime?
+
+  progress      Progress[]
+  problemAttempts ProblemAttempt[]
+  studySessions StudySession[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Unit {
+  id            String    @id @default(cuid())
+  code          String    @unique
+  name          String
+  description   String
+  order         Int
+
+  topics        Topic[]
+}
+
+model Topic {
+  id            String    @id @default(cuid())
+  unitId        String
+  name          String
+  description   String
+  order         Int
+  difficulty    String
+
+  unit          Unit      @relation(fields: [unitId], references: [id])
+  subtopics     Subtopic[]
+  problems      Problem[]
+  progress      Progress[]
+}
+
+model Subtopic {
+  id            String    @id @default(cuid())
+  topicId       String
+  name          String
+  description   String
+  order         Int
+
+  formulaSheet  String?
+  examples      String?
+  tips          String?
+
+  topic         Topic     @relation(fields: [topicId], references: [id])
+  problems      Problem[]
+}
+
+model Problem {
+  id            String    @id @default(cuid())
+  topicId       String
+  subtopicId    String?
+
+  type          String
+  difficulty    String
+  template      String
+  variables     String
+  solution      String
+
+  tags          String
+  estimatedTime Int
+  examRelevance Boolean   @default(true)
+
+  requiresDiagram Boolean  @default(false)
+  diagramType   String?
+
+  topic         Topic     @relation(fields: [topicId], references: [id])
+  subtopic      Subtopic? @relation(fields: [subtopicId], references: [id])
+  attempts      ProblemAttempt[]
+
+  createdAt     DateTime  @default(now())
+}
+
+model ProblemAttempt {
+  id            String    @id @default(cuid())
+  userId        String
+  problemId     String
+  sessionId     String?
+
+  generatedVariables String
+  userAnswer    String
+  isCorrect     Boolean
+  timeSpent     Int
+  hintsUsed     Int       @default(0)
+
+  stepsCompleted String?
+  stepsSkipped   Int      @default(0)
+
+  user          User      @relation(fields: [userId], references: [id])
+  problem       Problem   @relation(fields: [problemId], references: [id])
+  session       StudySession? @relation(fields: [sessionId], references: [id])
+
+  attemptedAt   DateTime  @default(now())
+}
+
+model Progress {
+  id            String    @id @default(cuid())
+  userId        String
+  topicId       String
+
+  totalAttempts Int       @default(0)
+  correctAttempts Int     @default(0)
+  averageTime   Float?
+  masteryLevel  Float     @default(0.0)
+
+  lastPracticed DateTime?
+  streak        Int       @default(0)
+
+  user          User      @relation(fields: [userId], references: [id])
+  topic         Topic     @relation(fields: [topicId], references: [id])
+
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([userId, topicId])
+}
+
+model StudySession {
+  id            String    @id @default(cuid())
+  userId        String
+
+  focusTopics   String
+  targetProblemCount Int
+  completedProblemCount Int @default(0)
+
+  accuracy      Float?
+  averageTime   Float?
+
+  user          User      @relation(fields: [userId], references: [id])
+  attempts      ProblemAttempt[]
+
+  startedAt     DateTime  @default(now())
+  endedAt       DateTime?
+}

@@ -1,36 +1,182 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EngineerIQ - T-Level Engineering Practice Platform
 
-## Getting Started
+An interactive web application designed to help T-level engineering students practice and master Units 4, 5, and 6 through interactive problem-solving with step-by-step solutions.
 
-First, run the development server:
+## 🎯 Purpose
+
+Built specifically for **Ireoluwa** (Manchester College, Openshaw) to support his T-level engineering studies with:
+- **Unit 4**: Essential Maths (Arithmetic, Algebra, Trigonometry, Calculus)
+- **Unit 5**: Essential Science (Forces, Energy, Electrical Science, Waves)
+- **Unit 6**: Materials & Properties (Metals, Polymers, Mechanical/Thermal Properties)
+
+## 🚀 Current Status
+
+**Phase 1 - Foundation: COMPLETE ✅**
+
+### What's Built:
+- ✅ Next.js 16 with TypeScript
+- ✅ SQLite Database with Prisma ORM
+- ✅ Complete database schema with all models
+- ✅ Seed data with 22 topics across 3 units
+- ✅ Sample problems for testing
+- ✅ Authentication helper functions
+
+### What's Next:
+- 🔨 Login/Authentication UI
+- 🔨 Student Dashboard
+- 🔨 Problem Generator Engine
+- 🔨 Interactive Problem Solving UI
+- 🔨 Guardian Monitoring Dashboard
+- 🔨 Progress Tracking & Analytics
+
+## 📊 Database Structure
+
+### Users
+- **Student**: `[email protected]` / `student123`
+- **Guardian**: `[email protected]` / `guardian123`
+
+### Units & Topics
+- **Unit 4 - Essential Maths**: 8 topics (Arithmetic → Integration)
+- **Unit 5 - Essential Science**: 6 topics (Forces → Chemical Reactions)
+- **Unit 6 - Materials**: 8 topics (Metals → Corrosion)
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Database**: SQLite with Prisma ORM
+- **Styling**: Tailwind CSS
+- **Math Rendering**: KaTeX (planned)
+- **Charts**: Recharts (planned)
+- **Authentication**: Custom JWT-based (in progress)
+
+## 📦 Installation
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up database
+npx prisma generate
+npx prisma migrate dev
+
+# Seed database with initial data
+npx tsx prisma/seed.ts
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🗂️ Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+engineeriq/
+├── app/                    # Next.js app directory
+│   ├── login/             # Login page (pending)
+│   ├── dashboard/         # Student dashboard (pending)
+│   └── practice/          # Practice mode (pending)
+├── components/            # React components
+│   └── ui/               # Reusable UI components
+├── lib/                   # Utility libraries
+│   ├── db.ts             # Prisma client
+│   ├── auth.ts           # Authentication helpers
+│   ├── utils.ts          # Utility functions
+│   └── problem-engine/   # Problem generation (pending)
+├── prisma/
+│   ├── schema.prisma     # Database schema
+│   ├── seed.ts           # Seed data script
+│   └── migrations/       # Database migrations
+└── public/               # Static assets
+```
 
-## Learn More
+## 🎓 Features (Planned)
 
-To learn more about Next.js, take a look at the following resources:
+### For Students (Ireoluwa):
+- 📚 Practice problems with randomized variables
+- 📝 Step-by-step solution walkthroughs
+- 📊 Progress tracking by topic
+- 🎯 Adaptive difficulty based on performance
+- 🔥 Streak tracking for daily practice
+- 📖 Quick reference materials
+- 🎨 Visual aids (diagrams, graphs, simulations)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### For Guardians:
+- 👀 Monitor student activity and time spent
+- 📈 View progress reports by unit/topic
+- 📉 Identify weak areas
+- 📅 Track study sessions
+- 📄 Export progress reports
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔑 Login Credentials
 
-## Deploy on Vercel
+**Student Account**
+- Email: `[email protected]`
+- Password: `student123`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Guardian Account** (for monitoring)
+- Email: `[email protected]`
+- Password: `guardian123`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 Sample Problems Included
+
+1. **Trigonometry** (Unit 4)
+   - Right-angled triangle calculations
+   - Sine rule applications
+
+2. **Forces & Motion** (Unit 5)
+   - Acceleration calculations
+   - Newton's second law
+
+3. **Mechanical Properties** (Unit 6)
+   - Stress calculations
+
+## 🚧 Development Roadmap
+
+### Phase 2: Core Features (Next Session)
+- [ ] Authentication UI with login page
+- [ ] Student dashboard with topic cards
+- [ ] Problem generator for Unit 4 topics
+- [ ] Problem display with KaTeX rendering
+- [ ] Answer validation system
+
+### Phase 3: Enhanced Features
+- [ ] Problem generators for Units 5 & 6
+- [ ] Visual diagrams (circuits, forces, geometry)
+- [ ] Step-by-step solution system
+- [ ] Progress tracking and analytics
+
+### Phase 4: Guardian Features
+- [ ] Guardian monitoring dashboard
+- [ ] Activity reports
+- [ ] Progress visualization charts
+
+### Phase 5: Polish & Deploy
+- [ ] UI/UX improvements
+- [ ] Performance optimization
+- [ ] Deploy to Vercel
+- [ ] User testing with Ireoluwa
+
+## 🔧 Environment Variables
+
+The `.env` file is already configured with:
+
+```env
+DATABASE_URL="file:./dev.db"
+```
+
+## 📚 Documentation
+
+- **Database Schema**: See `prisma/schema.prisma` for complete data model
+- **Seed Data**: Check `prisma/seed.ts` for initial data structure
+- **Auth Helpers**: Review `lib/auth.ts` for authentication functions
+
+## 🙏 Acknowledgments
+
+Built with ❤️ to support Ireoluwa's engineering education journey.
+
+---
+
+**Status**: Foundation Complete - Ready for UI Development
+**Last Updated**: January 24, 2026
