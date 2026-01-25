@@ -7,16 +7,21 @@ export async function GET() {
     const studentPassword = await bcrypt.hash('student123', 10);
     const guardianPassword = await bcrypt.hash('guardian123', 10);
 
-    // Try to upsert ireoluwa
-    const student = await prisma.user.upsert({
-      where: { username: 'ireoluwa' },
-      update: {
-        passwordHash: studentPassword,
-        email: '[email protected]',
-        name: 'Ireoluwa',
-        role: 'STUDENT',
+    // Delete existing users first to avoid conflicts
+    await prisma.user.deleteMany({
+      where: {
+        OR: [
+          { username: 'ireoluwa' },
+          { username: 'admin' },
+          { email: '[email protected]' },
+          { email: '[email protected]' },
+        ],
       },
-      create: {
+    });
+
+    // Create fresh users
+    const student = await prisma.user.create({
+      data: {
         username: 'ireoluwa',
         email: '[email protected]',
         name: 'Ireoluwa',
@@ -25,16 +30,8 @@ export async function GET() {
       },
     });
 
-    // Try to upsert admin
-    const guardian = await prisma.user.upsert({
-      where: { username: 'admin' },
-      update: {
-        passwordHash: guardianPassword,
-        email: '[email protected]',
-        name: 'Guardian',
-        role: 'GUARDIAN',
-      },
-      create: {
+    const guardian = await prisma.user.create({
+      data: {
         username: 'admin',
         email: '[email protected]',
         name: 'Guardian',
@@ -45,7 +42,7 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      message: 'Database setup complete! Users created/updated.',
+      message: 'Database setup complete! Users created successfully.',
       credentials: {
         student: { username: 'ireoluwa', password: 'student123' },
         guardian: { username: 'admin', password: 'guardian123' },
@@ -60,6 +57,7 @@ export async function GET() {
       {
         error: error.message,
         code: error.code,
+        stack: error.stack,
         details: 'Database error occurred'
       },
       { status: 500 }
