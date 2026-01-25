@@ -14,7 +14,20 @@ export async function POST(request: NextRequest) {
     const { problemId, topicId, userAnswer, correctAnswer, timeSpent, variables } =
       await request.json();
 
-    const isCorrect = checkAnswer(parseFloat(userAnswer), correctAnswer);
+    // Check answer based on type
+    let isCorrect = false;
+
+    // For multiple choice, do exact string comparison
+    if (typeof userAnswer === 'string' && typeof correctAnswer === 'string') {
+      isCorrect = userAnswer.trim() === correctAnswer.trim();
+    } else {
+      // For numeric answers, use tolerance-based comparison
+      const userNum = parseFloat(userAnswer);
+      const correctNum = typeof correctAnswer === 'number'
+        ? correctAnswer
+        : parseFloat(correctAnswer.toString());
+      isCorrect = checkAnswer(userNum, correctNum);
+    }
 
     // Record the attempt
     const attempt = await prisma.problemAttempt.create({
