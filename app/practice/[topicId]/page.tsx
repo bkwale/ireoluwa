@@ -8,12 +8,15 @@ import { Input } from '@/components/ui/input';
 
 interface GeneratedProblem {
   problemId: string;
+  type: string;
   question: string;
+  options?: string[];
   variables: Record<string, number>;
-  correctAnswer: number;
+  correctAnswer: string | number;
   steps: any[];
   difficulty: string;
   estimatedTime: number;
+  explanation?: string;
 }
 
 export default function PracticePage() {
@@ -66,6 +69,18 @@ export default function PracticePage() {
     setSubmitting(true);
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
 
+    // Check answer based on problem type
+    let correct = false;
+    if (problem.type === 'MULTIPLE_CHOICE') {
+      correct = userAnswer === problem.correctAnswer;
+    } else {
+      const userNum = parseFloat(userAnswer);
+      const correctNum = typeof problem.correctAnswer === 'number'
+        ? problem.correctAnswer
+        : parseFloat(problem.correctAnswer.toString());
+      correct = Math.abs(userNum - correctNum) <= 0.01;
+    }
+
     try {
       const response = await fetch('/api/problems/submit', {
         method: 'POST',
@@ -73,7 +88,7 @@ export default function PracticePage() {
         body: JSON.stringify({
           problemId: problem.problemId,
           topicId,
-          userAnswer: parseFloat(userAnswer),
+          userAnswer,
           correctAnswer: problem.correctAnswer,
           timeSpent,
           variables: problem.variables,
@@ -157,21 +172,54 @@ export default function PracticePage() {
             {/* Answer Input */}
             {!showResult && (
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="answer" className="text-base font-semibold text-gray-900">
-                    Your Answer:
-                  </label>
-                  <Input
-                    id="answer"
-                    type="number"
-                    step="0.01"
-                    placeholder="Enter your answer"
-                    value={userAnswer}
-                    onChange={(e) => setUserAnswer(e.target.value)}
-                    disabled={submitting}
-                    className="text-lg p-6 border-2"
-                  />
-                </div>
+                {problem.type === 'MULTIPLE_CHOICE' && problem.options ? (
+                  <div className="space-y-3">
+                    <label className="text-base font-semibold text-gray-900">
+                      Select your answer:
+                    </label>
+                    <div className="space-y-2">
+                      {problem.options.map((option, index) => (
+                        <div
+                          key={index}
+                          className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                            userAnswer === option
+                              ? 'border-blue-600 bg-blue-50'
+                              : 'border-gray-300 hover:border-blue-400'
+                          }`}
+                          onClick={() => setUserAnswer(option)}
+                        >
+                          <label className="flex items-center cursor-pointer">
+                            <input
+                              type="radio"
+                              name="answer"
+                              value={option}
+                              checked={userAnswer === option}
+                              onChange={(e) => setUserAnswer(e.target.value)}
+                              className="mr-3 w-5 h-5"
+                            />
+                            <span className="text-lg text-gray-900">{option}</span>
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <label htmlFor="answer" className="text-base font-semibold text-gray-900">
+                      Your Answer:
+                    </label>
+                    <Input
+                      id="answer"
+                      type="number"
+                      step="0.01"
+                      placeholder="Enter your answer"
+                      value={userAnswer}
+                      onChange={(e) => setUserAnswer(e.target.value)}
+                      disabled={submitting}
+                      className="text-lg p-6 border-2"
+                    />
+                  </div>
+                )}
                 <div className="flex gap-3">
                   <Button
                     onClick={handleSubmit}
@@ -180,13 +228,15 @@ export default function PracticePage() {
                   >
                     {submitting ? 'Submitting...' : 'Submit Answer'}
                   </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowSteps(!showSteps)}
-                    className="border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-semibold py-6"
-                  >
-                    {showSteps ? 'Hide' : 'Show'} Steps
-                  </Button>
+                  {problem.explanation && (
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowSteps(!showSteps)}
+                      className="border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-semibold py-6"
+                    >
+                      {showSteps ? 'Hide' : 'Show'} Hint
+                    </Button>
+                  )}
                 </div>
               </div>
             )}
@@ -209,12 +259,21 @@ export default function PracticePage() {
                     {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
                   </span>
                   <span className="text-sm text-gray-600">
-                    Correct answer: {problem.correctAnswer.toFixed(2)}
+                    Correct answer: {typeof problem.correctAnswer === 'number'
+                      ? problem.correctAnswer.toFixed(2)
+                      : problem.correctAnswer}
                   </span>
                 </div>
                 {!isCorrect && (
                   <p className="text-sm text-gray-700 mb-3">
-                    Your answer: {parseFloat(userAnswer).toFixed(2)}
+                    Your answer: {problem.type === 'MULTIPLE_CHOICE'
+                      ? userAnswer
+                      : parseFloat(userAnswer).toFixed(2)}
+                  </p>
+                )}
+                {problem.explanation && (
+                  <p className="text-sm text-gray-700 mt-3 p-3 bg-white rounded border">
+                    {problem.explanation}
                   </p>
                 )}
                 <Button onClick={handleNextProblem} className="w-full mt-2">

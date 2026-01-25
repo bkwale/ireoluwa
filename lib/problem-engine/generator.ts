@@ -1,11 +1,14 @@
 export interface GeneratedProblem {
   problemId: string;
+  type: string;
   question: string;
+  options?: string[]; // For multiple choice
   variables: Record<string, number>;
-  correctAnswer: number;
+  correctAnswer: string | number;
   steps: SolutionStep[];
   difficulty: string;
   estimatedTime: number;
+  explanation?: string;
 }
 
 export interface SolutionStep {
@@ -17,9 +20,33 @@ export interface SolutionStep {
 }
 
 export function generateProblem(problem: any): GeneratedProblem {
-  const template = JSON.parse(problem.template);
-  const variableRanges = JSON.parse(problem.variables);
   const solution = JSON.parse(problem.solution);
+
+  // Handle MULTIPLE_CHOICE problems
+  if (problem.type === 'MULTIPLE_CHOICE') {
+    // Template is a plain string for multiple choice
+    const question = problem.template;
+
+    // Shuffle options (correct answer + wrong answers)
+    const allOptions = [solution.correctAnswer, ...solution.wrongAnswers];
+    const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
+
+    return {
+      problemId: problem.id,
+      type: problem.type,
+      question,
+      options: shuffledOptions,
+      variables: {},
+      correctAnswer: solution.correctAnswer,
+      steps: [],
+      difficulty: problem.difficulty,
+      estimatedTime: problem.estimatedTime,
+      explanation: solution.explanation,
+    };
+  }
+
+  // Handle CALCULATION problems
+  const variableRanges = JSON.parse(problem.variables);
 
   // Generate random values for variables
   const generatedVariables: Record<string, number> = {};
@@ -32,42 +59,36 @@ export function generateProblem(problem: any): GeneratedProblem {
     generatedVariables[key] = min + randomStep * step;
   }
 
-  // Replace variables in question
-  let question = template.question;
+  // Replace variables in question template
+  let question = problem.template;
   for (const [key, value] of Object.entries(generatedVariables)) {
     question = question.replace(new RegExp(`\\{${key}\\}`, 'g'), value.toString());
   }
 
-  // Calculate correct answer
-  const correctAnswer = calculateAnswer(solution.answer, generatedVariables);
+  // Calculate correct answer using formula
+  const correctAnswer = calculateAnswer(solution.formula || solution.answer, generatedVariables);
 
   // Generate solution steps
-  const steps: SolutionStep[] = solution.steps.map((step: string, index: number) => {
-    let instruction = step;
-    let calculation = '';
-
-    // Replace variables in instruction
-    for (const [key, value] of Object.entries(generatedVariables)) {
-      instruction = instruction.replace(new RegExp(`\\{${key}\\}`, 'g'), value.toString());
-    }
-
-    return {
-      stepNumber: index + 1,
-      instruction,
-      formula: solution.formula,
-      calculation,
-      result: index === solution.steps.length - 1 ? correctAnswer.toFixed(2) : '',
-    };
-  });
+  const steps: SolutionStep[] = [];
+  if (solution.explanation) {
+    steps.push({
+      stepNumber: 1,
+      instruction: solution.explanation,
+      formula: solution.formula || solution.answer,
+      result: correctAnswer.toFixed(2),
+    });
+  }
 
   return {
     problemId: problem.id,
+    type: problem.type,
     question,
     variables: generatedVariables,
     correctAnswer,
     steps,
     difficulty: problem.difficulty,
     estimatedTime: problem.estimatedTime,
+    explanation: solution.explanation,
   };
 }
 
