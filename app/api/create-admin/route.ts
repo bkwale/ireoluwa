@@ -6,23 +6,32 @@ export async function GET() {
   try {
     const guardianPassword = await bcrypt.hash('guardian123', 10);
 
-    // Check if admin already exists
-    const existingAdmin = await prisma.user.findUnique({
+    // Check if any admin user exists by email or username
+    const existingByEmail = await prisma.user.findUnique({
+      where: { email: '[email protected]' },
+    });
+
+    const existingByUsername = await prisma.user.findUnique({
       where: { username: 'admin' },
     });
 
-    if (existingAdmin) {
-      // Update password
+    if (existingByEmail || existingByUsername) {
+      // Update whichever exists
+      const existing = existingByUsername || existingByEmail;
+
       const admin = await prisma.user.update({
-        where: { username: 'admin' },
+        where: { id: existing!.id },
         data: {
+          username: 'admin',
+          email: '[email protected]',
           passwordHash: guardianPassword,
+          role: 'GUARDIAN',
         },
       });
 
       return NextResponse.json({
         success: true,
-        message: 'Admin password updated!',
+        message: 'Admin account updated!',
         credentials: {
           username: 'admin',
           password: 'guardian123',
