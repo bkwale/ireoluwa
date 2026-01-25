@@ -3,7 +3,9 @@ import { prisma } from '@/lib/db';
 
 export async function GET() {
   try {
-    // Delete all existing data
+    // Delete all existing data in correct order (respecting foreign keys)
+    await prisma.problemAttempt.deleteMany({});
+    await prisma.progress.deleteMany({});
     await prisma.problem.deleteMany({});
     await prisma.topic.deleteMany({});
     await prisma.unit.deleteMany({});
