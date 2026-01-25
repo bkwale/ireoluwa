@@ -8,588 +8,508 @@ export async function GET() {
     await prisma.topic.deleteMany({});
     await prisma.unit.deleteMany({});
 
-    // Create Units for different subjects
+    // Create the 15 T-Level Engineering Units
     const units = [
-      // Engineering
-      {
-        id: 'unit_eng_001',
-        code: 'ENG1',
-        name: 'Engineering Principles',
-        description: 'Core engineering principles and fundamentals',
-        order: 1,
-      },
-      {
-        id: 'unit_eng_002',
-        code: 'ENG2',
-        name: 'Engineering Design',
-        description: 'Design processes and technical drawing',
-        order: 2,
-      },
-      {
-        id: 'unit_eng_003',
-        code: 'ENG3',
-        name: 'Engineering Systems',
-        description: 'Mechanical, electrical and control systems',
-        order: 3,
-      },
-      // Health & Social Care
-      {
-        id: 'unit_hsc_001',
-        code: 'HSC1',
-        name: 'Health & Social Care Principles',
-        description: 'Core principles and values in health and social care',
-        order: 4,
-      },
-      {
-        id: 'unit_hsc_002',
-        code: 'HSC2',
-        name: 'Health & Wellbeing',
-        description: 'Promoting health and wellbeing',
-        order: 5,
-      },
-      // Digital Production, Design & Development
-      {
-        id: 'unit_dig_001',
-        code: 'DIG1',
-        name: 'Digital Development',
-        description: 'Software development and programming',
-        order: 6,
-      },
-      {
-        id: 'unit_dig_002',
-        code: 'DIG2',
-        name: 'Digital Design',
-        description: 'Digital design principles and tools',
-        order: 7,
-      },
-      // Education & Childcare
-      {
-        id: 'unit_edu_001',
-        code: 'EDU1',
-        name: 'Child Development',
-        description: 'Understanding child development stages',
-        order: 8,
-      },
-      {
-        id: 'unit_edu_002',
-        code: 'EDU2',
-        name: 'Education Practice',
-        description: 'Educational approaches and safeguarding',
-        order: 9,
-      },
+      { id: 'unit_001', code: 'UNIT1', name: 'Working Within Engineering', description: 'Manufacturing processes, maintenance, automation and CAD/CAM systems', order: 1 },
+      { id: 'unit_002', code: 'UNIT2', name: 'Engineering Past, Present and Future', description: 'Historical developments, industrial revolutions and innovation', order: 2 },
+      { id: 'unit_003', code: 'UNIT3', name: 'Engineering Representation', description: 'Technical drawing, sketching, orthographic projection and CAD', order: 3 },
+      { id: 'unit_004', code: 'UNIT4', name: 'Essential Maths', description: 'Algebra, geometry, trigonometry, calculus and logarithms', order: 4 },
+      { id: 'unit_005', code: 'UNIT5', name: 'Essential Science', description: 'Forces, energy, heat, electricity, waves and chemistry', order: 5 },
+      { id: 'unit_006', code: 'UNIT6', name: 'Materials and Properties', description: 'Metals, polymers, ceramics, composites and material properties', order: 6 },
+      { id: 'unit_007', code: 'UNIT7', name: 'Mechanical Principles', description: 'Forces, stress, machines, power transmission and hydraulics', order: 7 },
+      { id: 'unit_008', code: 'UNIT8', name: 'Electrical and Electronic Principles', description: 'DC/AC circuits, components, sensors and electrical safety', order: 8 },
+      { id: 'unit_009', code: 'UNIT9', name: 'Mechatronics', description: 'Integrated systems, sensors, control and automation', order: 9 },
+      { id: 'unit_010', code: 'UNIT10', name: 'Engineering and Manufacturing Control Systems', description: 'Open/closed-loop systems, PLCs and industrial automation', order: 10 },
+      { id: 'unit_011', code: 'UNIT11', name: 'Quality Management', description: 'Quality planning, control tools, continuous improvement and standards', order: 11 },
+      { id: 'unit_012', code: 'UNIT12', name: 'Health and Safety Principles', description: 'Legislation, risk assessment, COSHH, PPE and environmental protection', order: 12 },
+      { id: 'unit_013', code: 'UNIT13', name: 'Commercial and Financial Awareness', description: 'Business structures, costs, supply chains and procurement', order: 13 },
+      { id: 'unit_014', code: 'UNIT14', name: 'Professional Responsibilities', description: 'Ethics, teamwork, communication, diversity and lifelong learning', order: 14 },
+      { id: 'unit_015', code: 'UNIT15', name: 'Project and Programme Management', description: 'Project planning, scheduling, risk management and resource allocation', order: 15 },
     ];
 
     await prisma.unit.createMany({ data: units });
 
-    // Create Topics
+    // Create Topics for each unit
     const topics = [
-      // Engineering Topics
-      { id: 'topic_001', unitId: 'unit_eng_001', name: 'Forces and Motion', description: 'Fundamental principles of forces, motion, and energy', order: 1, difficulty: 'MEDIUM' },
-      { id: 'topic_002', unitId: 'unit_eng_001', name: 'Materials and Properties', description: 'Properties and processing of engineering materials', order: 2, difficulty: 'MEDIUM' },
-      { id: 'topic_003', unitId: 'unit_eng_001', name: 'Engineering Mathematics', description: 'Mathematical concepts and calculations for engineering', order: 3, difficulty: 'HARD' },
-      { id: 'topic_004', unitId: 'unit_eng_001', name: 'Statics and Dynamics', description: 'Forces, moments, and motion analysis', order: 4, difficulty: 'HARD' },
-      { id: 'topic_005', unitId: 'unit_eng_001', name: 'Thermodynamics', description: 'Heat, temperature, and energy transfer', order: 5, difficulty: 'MEDIUM' },
-      { id: 'topic_006', unitId: 'unit_eng_001', name: 'Fluid Mechanics', description: 'Properties and behavior of fluids', order: 6, difficulty: 'MEDIUM' },
-      { id: 'topic_007', unitId: 'unit_eng_001', name: 'Health and Safety', description: 'Engineering health and safety regulations', order: 7, difficulty: 'EASY' },
-      { id: 'topic_008', unitId: 'unit_eng_002', name: 'Technical Drawing', description: 'Reading and creating engineering drawings', order: 1, difficulty: 'MEDIUM' },
-      { id: 'topic_009', unitId: 'unit_eng_002', name: 'CAD and Design', description: 'Computer-aided design principles', order: 2, difficulty: 'MEDIUM' },
-      { id: 'topic_010', unitId: 'unit_eng_002', name: 'Manufacturing Processes', description: 'Common manufacturing and fabrication techniques', order: 3, difficulty: 'MEDIUM' },
-      { id: 'topic_011', unitId: 'unit_eng_002', name: 'Quality Control', description: 'Quality assurance and control in engineering', order: 4, difficulty: 'MEDIUM' },
-      { id: 'topic_012', unitId: 'unit_eng_002', name: 'Testing and Measurement', description: 'Measurement techniques and testing procedures', order: 5, difficulty: 'MEDIUM' },
-      { id: 'topic_013', unitId: 'unit_eng_002', name: 'Welding and Joining', description: 'Methods of joining materials', order: 6, difficulty: 'MEDIUM' },
-      { id: 'topic_014', unitId: 'unit_eng_002', name: 'Sustainable Engineering', description: 'Environmental considerations and sustainability', order: 7, difficulty: 'EASY' },
-      { id: 'topic_015', unitId: 'unit_eng_002', name: 'Project Management', description: 'Planning and managing engineering projects', order: 8, difficulty: 'EASY' },
-      { id: 'topic_016', unitId: 'unit_eng_003', name: 'Mechanical Systems', description: 'Mechanical components and systems', order: 1, difficulty: 'MEDIUM' },
-      { id: 'topic_017', unitId: 'unit_eng_003', name: 'Electrical Systems', description: 'Basic electrical circuits and components', order: 2, difficulty: 'MEDIUM' },
-      { id: 'topic_018', unitId: 'unit_eng_003', name: 'Electronic Systems', description: 'Electronic components and circuits', order: 3, difficulty: 'MEDIUM' },
-      { id: 'topic_019', unitId: 'unit_eng_003', name: 'Control Systems', description: 'Automated control systems and feedback loops', order: 4, difficulty: 'HARD' },
-      { id: 'topic_020', unitId: 'unit_eng_003', name: 'Pneumatic and Hydraulic Systems', description: 'Fluid power systems and applications', order: 5, difficulty: 'MEDIUM' },
-      { id: 'topic_021', unitId: 'unit_eng_003', name: 'Programming and Automation', description: 'Basic programming for engineering applications', order: 6, difficulty: 'HARD' },
-      { id: 'topic_022', unitId: 'unit_eng_003', name: 'Maintenance and Fault Finding', description: 'Troubleshooting and maintaining engineering systems', order: 7, difficulty: 'MEDIUM' },
+      // Unit 1: Working Within Engineering
+      { id: 'topic_001', unitId: 'unit_001', name: 'Manufacturing Processes', description: 'Types and applications of manufacturing processes', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_002', unitId: 'unit_001', name: 'Design Brief and Project Design Specification', description: 'Creating design briefs and specifications', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_003', unitId: 'unit_001', name: 'Installation and Commissioning', description: 'Installing and commissioning engineering systems', order: 3, difficulty: 'HARD' },
+      { id: 'topic_004', unitId: 'unit_001', name: 'Types of Maintenance', description: 'Preventive, corrective and predictive maintenance', order: 4, difficulty: 'MEDIUM' },
+      { id: 'topic_005', unitId: 'unit_001', name: 'Maintenance Operations and Roles', description: 'Maintenance team roles and responsibilities', order: 5, difficulty: 'EASY' },
+      { id: 'topic_006', unitId: 'unit_001', name: 'CAD/CAM Systems', description: 'Computer-aided design and manufacturing', order: 6, difficulty: 'MEDIUM' },
+      { id: 'topic_007', unitId: 'unit_001', name: 'Robotic Systems', description: 'Industrial robotics and automation', order: 7, difficulty: 'HARD' },
 
-      // Health & Social Care Topics
-      { id: 'topic_101', unitId: 'unit_hsc_001', name: 'Care Values and Principles', description: 'Core values in health and social care', order: 1, difficulty: 'EASY' },
-      { id: 'topic_102', unitId: 'unit_hsc_001', name: 'Communication in Care', description: 'Effective communication with service users', order: 2, difficulty: 'MEDIUM' },
-      { id: 'topic_103', unitId: 'unit_hsc_001', name: 'Safeguarding', description: 'Protecting vulnerable individuals', order: 3, difficulty: 'MEDIUM' },
-      { id: 'topic_104', unitId: 'unit_hsc_002', name: 'Health and Wellbeing', description: 'Factors affecting health and wellbeing', order: 1, difficulty: 'MEDIUM' },
-      { id: 'topic_105', unitId: 'unit_hsc_002', name: 'Person-Centred Care', description: 'Individualized care approaches', order: 2, difficulty: 'MEDIUM' },
+      // Unit 2: Engineering Past, Present and Future
+      { id: 'topic_008', unitId: 'unit_002', name: 'Historical Technological Developments', description: 'Key engineering innovations through history', order: 1, difficulty: 'EASY' },
+      { id: 'topic_009', unitId: 'unit_002', name: 'Development of Materials', description: 'Evolution of engineering materials', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_010', unitId: 'unit_002', name: 'Industrial Revolutions', description: 'The four industrial revolutions', order: 3, difficulty: 'MEDIUM' },
+      { id: 'topic_011', unitId: 'unit_002', name: 'Innovation in Engineering', description: 'Modern engineering innovation and future trends', order: 4, difficulty: 'MEDIUM' },
 
-      // Digital Topics
-      { id: 'topic_201', unitId: 'unit_dig_001', name: 'Programming Fundamentals', description: 'Basic programming concepts and structures', order: 1, difficulty: 'MEDIUM' },
-      { id: 'topic_202', unitId: 'unit_dig_001', name: 'Data Structures', description: 'Arrays, lists, and data organization', order: 2, difficulty: 'HARD' },
-      { id: 'topic_203', unitId: 'unit_dig_001', name: 'Web Development', description: 'HTML, CSS, and JavaScript basics', order: 3, difficulty: 'MEDIUM' },
-      { id: 'topic_204', unitId: 'unit_dig_002', name: 'UI/UX Design', description: 'User interface and experience design', order: 1, difficulty: 'MEDIUM' },
-      { id: 'topic_205', unitId: 'unit_dig_002', name: 'Databases', description: 'Database design and SQL', order: 2, difficulty: 'HARD' },
+      // Unit 3: Engineering Representation
+      { id: 'topic_012', unitId: 'unit_003', name: 'Engineering Drawings', description: 'Reading and interpreting engineering drawings', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_013', unitId: 'unit_003', name: 'Orthographic Projection', description: 'First and third angle projection', order: 2, difficulty: 'HARD' },
+      { id: 'topic_014', unitId: 'unit_003', name: 'Isometric Drawings', description: 'Creating isometric representations', order: 3, difficulty: 'MEDIUM' },
+      { id: 'topic_015', unitId: 'unit_003', name: 'Dimensioning and Tolerancing', description: 'Geometric dimensioning and tolerancing (GD&T)', order: 4, difficulty: 'HARD' },
 
-      // Education & Childcare Topics
-      { id: 'topic_301', unitId: 'unit_edu_001', name: 'Child Development Stages', description: 'Physical, cognitive, and emotional development', order: 1, difficulty: 'MEDIUM' },
-      { id: 'topic_302', unitId: 'unit_edu_001', name: 'Play and Learning', description: 'Learning through play approaches', order: 2, difficulty: 'EASY' },
-      { id: 'topic_303', unitId: 'unit_edu_002', name: 'Safeguarding Children', description: 'Child protection and safeguarding', order: 1, difficulty: 'MEDIUM' },
-      { id: 'topic_304', unitId: 'unit_edu_002', name: 'Inclusive Practice', description: 'Supporting all children', order: 2, difficulty: 'MEDIUM' },
+      // Unit 4: Essential Maths
+      { id: 'topic_016', unitId: 'unit_004', name: 'Arithmetic and Algebra', description: 'Basic arithmetic operations and algebraic manipulation', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_017', unitId: 'unit_004', name: 'Geometry', description: 'Areas, volumes and geometric relationships', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_018', unitId: 'unit_004', name: 'Trigonometry', description: 'Sin, cos, tan and solving triangles', order: 3, difficulty: 'HARD' },
+      { id: 'topic_019', unitId: 'unit_004', name: 'Differentiation', description: 'Derivatives and rates of change', order: 4, difficulty: 'HARD' },
+      { id: 'topic_020', unitId: 'unit_004', name: 'Integration', description: 'Integration and areas under curves', order: 5, difficulty: 'HARD' },
+
+      // Unit 5: Essential Science
+      { id: 'topic_021', unitId: 'unit_005', name: 'Forces and Motion', description: 'Newton\'s laws and motion principles', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_022', unitId: 'unit_005', name: 'Energy and Power', description: 'Energy conservation and power calculations', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_023', unitId: 'unit_005', name: 'Heat Transfer', description: 'Conduction, convection and radiation', order: 3, difficulty: 'MEDIUM' },
+      { id: 'topic_024', unitId: 'unit_005', name: 'Electrical Science', description: 'Current, voltage, resistance and Ohm\'s law', order: 4, difficulty: 'MEDIUM' },
+
+      // Unit 6: Materials and Properties
+      { id: 'topic_025', unitId: 'unit_006', name: 'Metals', description: 'Ferrous and non-ferrous metals', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_026', unitId: 'unit_006', name: 'Polymers', description: 'Thermoplastics and thermosets', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_027', unitId: 'unit_006', name: 'Mechanical Properties', description: 'Strength, hardness, ductility and toughness', order: 3, difficulty: 'MEDIUM' },
+      { id: 'topic_028', unitId: 'unit_006', name: 'Sustainability of Materials', description: 'Environmental impact and recycling', order: 4, difficulty: 'EASY' },
+
+      // Unit 7: Mechanical Principles
+      { id: 'topic_029', unitId: 'unit_007', name: 'Forces and Moments', description: 'Force systems and moment calculations', order: 1, difficulty: 'HARD' },
+      { id: 'topic_030', unitId: 'unit_007', name: 'Stress, Strain and Deformation', description: 'Material behavior under load', order: 2, difficulty: 'HARD' },
+      { id: 'topic_031', unitId: 'unit_007', name: 'Gears and Mechanisms', description: 'Gear ratios and mechanical advantage', order: 3, difficulty: 'MEDIUM' },
+      { id: 'topic_032', unitId: 'unit_007', name: 'Hydraulics and Pneumatics', description: 'Fluid power systems', order: 4, difficulty: 'MEDIUM' },
+
+      // Unit 8: Electrical and Electronic Principles
+      { id: 'topic_033', unitId: 'unit_008', name: 'Electrical Quantities', description: 'Voltage, current, resistance and power', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_034', unitId: 'unit_008', name: 'DC and AC Circuits', description: 'Series and parallel circuits', order: 2, difficulty: 'HARD' },
+      { id: 'topic_035', unitId: 'unit_008', name: 'Sensors and Actuators', description: 'Input and output devices', order: 3, difficulty: 'MEDIUM' },
+      { id: 'topic_036', unitId: 'unit_008', name: 'Safety in Electrical Systems', description: 'Electrical safety practices', order: 4, difficulty: 'EASY' },
+
+      // Unit 9: Mechatronics
+      { id: 'topic_037', unitId: 'unit_009', name: 'Integrated Mechanical and Electronic Systems', description: 'Combining mechanical and electronic components', order: 1, difficulty: 'HARD' },
+      { id: 'topic_038', unitId: 'unit_009', name: 'Sensors and Control', description: 'Feedback and control systems', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_039', unitId: 'unit_009', name: 'Applications of Mechatronics', description: 'Real-world mechatronic systems', order: 3, difficulty: 'MEDIUM' },
+
+      // Unit 10: Control Systems
+      { id: 'topic_040', unitId: 'unit_010', name: 'Open-loop and Closed-loop Systems', description: 'Control system types', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_041', unitId: 'unit_010', name: 'PLCs', description: 'Programmable Logic Controllers', order: 2, difficulty: 'HARD' },
+      { id: 'topic_042', unitId: 'unit_010', name: 'Industrial Automation', description: 'Automated manufacturing systems', order: 3, difficulty: 'MEDIUM' },
+
+      // Unit 11: Quality Management
+      { id: 'topic_043', unitId: 'unit_011', name: 'Quality Planning', description: 'Quality management systems', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_044', unitId: 'unit_011', name: 'Quality Control Tools', description: 'Statistical process control and inspection', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_045', unitId: 'unit_011', name: 'Standards and Compliance', description: 'ISO standards and quality certification', order: 3, difficulty: 'EASY' },
+
+      // Unit 12: Health and Safety
+      { id: 'topic_046', unitId: 'unit_012', name: 'Health and Safety Legislation', description: 'UK health and safety laws', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_047', unitId: 'unit_012', name: 'Risk Assessment', description: 'Identifying and controlling hazards', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_048', unitId: 'unit_012', name: 'COSHH', description: 'Control of Substances Hazardous to Health', order: 3, difficulty: 'MEDIUM' },
+      { id: 'topic_049', unitId: 'unit_012', name: 'PPE', description: 'Personal Protective Equipment', order: 4, difficulty: 'EASY' },
+
+      // Unit 13: Commercial and Financial Awareness
+      { id: 'topic_050', unitId: 'unit_013', name: 'Business Structures', description: 'Types of business organizations', order: 1, difficulty: 'EASY' },
+      { id: 'topic_051', unitId: 'unit_013', name: 'Costs and Pricing', description: 'Fixed and variable costs', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_052', unitId: 'unit_013', name: 'Supply Chains', description: 'Supply chain management', order: 3, difficulty: 'MEDIUM' },
+
+      // Unit 14: Professional Responsibilities
+      { id: 'topic_053', unitId: 'unit_014', name: 'Ethics in Engineering', description: 'Professional ethics and conduct', order: 1, difficulty: 'EASY' },
+      { id: 'topic_054', unitId: 'unit_014', name: 'Teamwork and Communication', description: 'Working effectively in teams', order: 2, difficulty: 'EASY' },
+      { id: 'topic_055', unitId: 'unit_014', name: 'Equality, Diversity and Inclusion', description: 'Inclusive workplace practices', order: 3, difficulty: 'EASY' },
+
+      // Unit 15: Project Management
+      { id: 'topic_056', unitId: 'unit_015', name: 'Project Planning', description: 'Planning and scheduling projects', order: 1, difficulty: 'MEDIUM' },
+      { id: 'topic_057', unitId: 'unit_015', name: 'Risk Management', description: 'Identifying and mitigating project risks', order: 2, difficulty: 'MEDIUM' },
+      { id: 'topic_058', unitId: 'unit_015', name: 'Monitoring and Evaluation', description: 'Tracking project progress', order: 3, difficulty: 'MEDIUM' },
     ];
 
     await prisma.topic.createMany({ data: topics });
 
-    // Create comprehensive problems
+    // Create comprehensive problems for each topic
     const problems: any[] = [];
 
-    // Engineering problems (detailed)
-    const engineeringProblems = [
-      // Forces and Motion
+    // Helper function to create 3 problems per topic
+    const addProblemsForTopic = (topicId: string, topicName: string, easyQ: any, mediumQ: any, hardQ: any) => {
+      problems.push(
+        {
+          topicId,
+          type: 'MULTIPLE_CHOICE',
+          difficulty: 'EASY',
+          ...easyQ,
+          estimatedTime: 60,
+          examRelevance: true,
+        },
+        {
+          topicId,
+          type: 'MULTIPLE_CHOICE',
+          difficulty: 'MEDIUM',
+          ...mediumQ,
+          estimatedTime: 90,
+          examRelevance: true,
+        },
+        {
+          topicId,
+          type: 'MULTIPLE_CHOICE',
+          difficulty: 'HARD',
+          ...hardQ,
+          estimatedTime: 120,
+          examRelevance: true,
+        }
+      );
+    };
+
+    // Unit 1: Working Within Engineering
+    addProblemsForTopic('topic_001', 'Manufacturing Processes',
       {
-        topicId: 'topic_001',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'EASY',
+        template: 'Which manufacturing process involves removing material from a workpiece?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'Subtractive manufacturing',
+          wrongAnswers: ['Additive manufacturing', 'Casting', 'Forming'],
+          explanation: 'Subtractive manufacturing removes material through processes like milling, turning and drilling.',
+        }),
+        tags: 'manufacturing,processes',
+      },
+      {
+        template: 'What is the main advantage of CNC machining over manual machining?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'Higher precision and repeatability',
+          wrongAnswers: ['Lower cost', 'No programming required', 'Faster for one-off parts'],
+          explanation: 'CNC machines offer superior precision and can produce identical parts consistently.',
+        }),
+        tags: 'manufacturing,cnc',
+      },
+      {
+        template: 'In injection moulding, what is the purpose of the cooling phase?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'To solidify the plastic in the mould',
+          wrongAnswers: ['To heat the plastic', 'To eject the part', 'To clean the mould'],
+          explanation: 'Cooling allows the molten plastic to solidify and take the shape of the mould cavity.',
+        }),
+        tags: 'manufacturing,moulding',
+      }
+    );
+
+    addProblemsForTopic('topic_004', 'Types of Maintenance',
+      {
+        template: 'Which type of maintenance is performed before a failure occurs?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'Preventive maintenance',
+          wrongAnswers: ['Corrective maintenance', 'Breakdown maintenance', 'Emergency maintenance'],
+          explanation: 'Preventive maintenance is scheduled maintenance performed to prevent failures.',
+        }),
+        tags: 'maintenance,types',
+      },
+      {
+        template: 'What is predictive maintenance based on?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'Condition monitoring data',
+          wrongAnswers: ['Fixed time intervals', 'Random selection', 'Visual inspection only'],
+          explanation: 'Predictive maintenance uses data from sensors and monitoring to predict when maintenance is needed.',
+        }),
+        tags: 'maintenance,predictive',
+      },
+      {
+        template: 'Which maintenance strategy has the lowest cost but highest risk of failure?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'Run-to-failure (reactive)',
+          wrongAnswers: ['Preventive', 'Predictive', 'Proactive'],
+          explanation: 'Run-to-failure waits for equipment to break down, which is cheap initially but risky.',
+        }),
+        tags: 'maintenance,strategy',
+      }
+    );
+
+    // Unit 4: Essential Maths
+    addProblemsForTopic('topic_016', 'Arithmetic and Algebra',
+      {
+        template: 'What is the value of 2³?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: '8',
+          wrongAnswers: ['6', '9', '12'],
+          explanation: '2³ = 2 × 2 × 2 = 8',
+        }),
+        tags: 'maths,powers',
+      },
+      {
+        template: 'If 3x + 5 = 20, what is the value of x?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: '5',
+          wrongAnswers: ['3', '4', '6'],
+          explanation: '3x = 20 - 5 = 15, therefore x = 15/3 = 5',
+        }),
+        tags: 'maths,equations',
+      },
+      {
+        template: 'Simplify: (x² × x³) ÷ x',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'x⁴',
+          wrongAnswers: ['x²', 'x³', 'x⁵'],
+          explanation: 'x² × x³ = x⁵, then x⁵ ÷ x = x⁴',
+        }),
+        tags: 'maths,algebra',
+      }
+    );
+
+    addProblemsForTopic('topic_018', 'Trigonometry',
+      {
+        template: 'In a right-angled triangle, what does SOH stand for in SOHCAHTOA?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'Sin = Opposite / Hypotenuse',
+          wrongAnswers: ['Sin = Opposite / Height', 'Sin = Opposite × Hypotenuse', 'Sum Of Heights'],
+          explanation: 'SOH means Sine equals Opposite divided by Hypotenuse.',
+        }),
+        tags: 'maths,trig',
+      },
+      {
+        template: 'What is the value of sin(90°)?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: '1',
+          wrongAnswers: ['0', '0.5', '√2/2'],
+          explanation: 'sin(90°) = 1, as the opposite side equals the hypotenuse at 90°.',
+        }),
+        tags: 'maths,trig-values',
+      },
+      {
+        template: 'In a right triangle, if the opposite side is 3 and the adjacent side is 4, what is tan(θ)?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: '0.75',
+          wrongAnswers: ['0.6', '1.33', '5'],
+          explanation: 'tan(θ) = opposite/adjacent = 3/4 = 0.75',
+        }),
+        tags: 'maths,trig-calc',
+      }
+    );
+
+    // Unit 5: Essential Science
+    addProblemsForTopic('topic_021', 'Forces and Motion',
+      {
         template: 'What is the SI unit of force?',
         variables: '{}',
         solution: JSON.stringify({
           correctAnswer: 'Newton (N)',
           wrongAnswers: ['Joule (J)', 'Watt (W)', 'Pascal (Pa)'],
-          explanation: 'The Newton (N) is the SI unit of force. It is named after Sir Isaac Newton.',
+          explanation: 'The Newton (N) is the SI unit of force, named after Sir Isaac Newton.',
         }),
-        tags: 'forces,units',
-        estimatedTime: 60,
-        examRelevance: true,
+        tags: 'science,forces,units',
       },
       {
-        topicId: 'topic_001',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'MEDIUM',
         template: "Which of Newton's laws states: For every action, there is an equal and opposite reaction?",
         variables: '{}',
         solution: JSON.stringify({
           correctAnswer: "Newton's Third Law",
           wrongAnswers: ["Newton's First Law", "Newton's Second Law", "Law of Universal Gravitation"],
-          explanation: "Newton's Third Law states that for every action force, there is an equal and opposite reaction force.",
+          explanation: "Newton's Third Law states that action and reaction forces are equal and opposite.",
         }),
-        tags: 'forces,newtons-laws',
-        estimatedTime: 90,
-        examRelevance: true,
+        tags: 'science,newtons-laws',
       },
       {
-        topicId: 'topic_001',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'HARD',
-        template: 'A car of mass 1000kg accelerates from rest to 20m/s in 10 seconds. What is the net force acting on the car?',
+        template: 'A car of mass 1000kg accelerates from rest to 20m/s in 10 seconds. What is the net force?',
         variables: '{}',
         solution: JSON.stringify({
           correctAnswer: '2000 N',
           wrongAnswers: ['1000 N', '20000 N', '200 N'],
-          explanation: 'Using F = ma, first find acceleration: a = (20-0)/10 = 2 m/s². Then F = 1000 × 2 = 2000 N.',
+          explanation: 'Using F = ma: acceleration = (20-0)/10 = 2 m/s², so F = 1000 × 2 = 2000 N.',
         }),
-        tags: 'forces,calculations',
-        estimatedTime: 120,
-        examRelevance: true,
-      },
+        tags: 'science,calculations',
+      }
+    );
 
-      // Materials and Properties
+    addProblemsForTopic('topic_024', 'Electrical Science',
       {
-        topicId: 'topic_002',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'EASY',
-        template: "Which material property describes a material's ability to be drawn into wires?",
+        template: "What does Ohm's law state?",
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'V = I × R',
+          wrongAnswers: ['V = I / R', 'V = R / I', 'V = I + R'],
+          explanation: "Ohm's law states that Voltage equals Current multiplied by Resistance.",
+        }),
+        tags: 'science,electricity',
+      },
+      {
+        template: 'If a circuit has a voltage of 12V and resistance of 4Ω, what is the current?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: '3 A',
+          wrongAnswers: ['2 A', '4 A', '48 A'],
+          explanation: 'Using I = V/R: I = 12/4 = 3 A',
+        }),
+        tags: 'science,ohms-law',
+      },
+      {
+        template: 'What happens to current in a series circuit?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'It stays the same throughout',
+          wrongAnswers: ['It decreases', 'It increases', 'It varies randomly'],
+          explanation: 'In a series circuit, current is constant throughout all components.',
+        }),
+        tags: 'science,circuits',
+      }
+    );
+
+    // Unit 6: Materials and Properties
+    addProblemsForTopic('topic_027', 'Mechanical Properties',
+      {
+        template: "Which property describes a material's ability to be drawn into wires?",
         variables: '{}',
         solution: JSON.stringify({
           correctAnswer: 'Ductility',
           wrongAnswers: ['Malleability', 'Hardness', 'Brittleness'],
-          explanation: 'Ductility is the ability of a material to be drawn into wires without breaking.',
+          explanation: 'Ductility is the ability to be drawn into wires without breaking.',
         }),
         tags: 'materials,properties',
-        estimatedTime: 60,
-        examRelevance: true,
       },
       {
-        topicId: 'topic_002',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'MEDIUM',
-        template: 'What type of stress occurs when a material is subjected to pulling forces?',
+        template: 'What type of stress occurs when pulling forces are applied to a material?',
         variables: '{}',
         solution: JSON.stringify({
           correctAnswer: 'Tensile stress',
           wrongAnswers: ['Compressive stress', 'Shear stress', 'Torsional stress'],
-          explanation: 'Tensile stress occurs when forces pull on a material, trying to stretch it.',
+          explanation: 'Tensile stress results from pulling or stretching forces.',
         }),
         tags: 'materials,stress',
-        estimatedTime: 90,
-        examRelevance: true,
       },
       {
-        topicId: 'topic_002',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'HARD',
-        template: 'Which heat treatment process involves heating steel above its critical temperature and then cooling it rapidly?',
+        template: 'Which heat treatment process increases steel hardness through rapid cooling?',
         variables: '{}',
         solution: JSON.stringify({
           correctAnswer: 'Quenching',
           wrongAnswers: ['Annealing', 'Tempering', 'Normalizing'],
-          explanation: 'Quenching involves rapid cooling to increase hardness and strength of steel.',
+          explanation: 'Quenching involves rapid cooling to increase hardness.',
         }),
         tags: 'materials,heat-treatment',
-        estimatedTime: 120,
-        examRelevance: true,
-      },
+      }
+    );
 
-      // Engineering Mathematics
+    // Unit 12: Health and Safety
+    addProblemsForTopic('topic_046', 'Health and Safety Legislation',
       {
-        topicId: 'topic_003',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'EASY',
-        template: 'What is the formula for the area of a circle?',
+        template: 'Which Act is the primary health and safety legislation in the UK?',
         variables: '{}',
         solution: JSON.stringify({
-          correctAnswer: 'πr²',
-          wrongAnswers: ['2πr', 'πd', 'πr'],
-          explanation: 'The area of a circle is π multiplied by the radius squared (A = πr²).',
+          correctAnswer: 'Health and Safety at Work Act 1974',
+          wrongAnswers: ['Safety Act 1990', 'Workplace Safety Act 2000', 'Employment Act 1974'],
+          explanation: 'The Health and Safety at Work Act 1974 is the main UK safety legislation.',
         }),
-        tags: 'math,geometry',
-        estimatedTime: 60,
-        examRelevance: true,
+        tags: 'safety,legislation',
       },
       {
-        topicId: 'topic_003',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'MEDIUM',
-        template: 'What is the gradient of a straight line passing through points (2,3) and (6,11)?',
+        template: 'Who is responsible for health and safety in the workplace?',
         variables: '{}',
         solution: JSON.stringify({
-          correctAnswer: '2',
-          wrongAnswers: ['0.5', '4', '8'],
-          explanation: 'Gradient = (y₂-y₁)/(x₂-x₁) = (11-3)/(6-2) = 8/4 = 2.',
+          correctAnswer: 'Everyone - employers and employees',
+          wrongAnswers: ['Only employers', 'Only health and safety officers', 'Only managers'],
+          explanation: 'Health and safety is a shared responsibility between all parties.',
         }),
-        tags: 'math,algebra',
-        estimatedTime: 90,
-        examRelevance: true,
+        tags: 'safety,responsibility',
       },
       {
-        topicId: 'topic_003',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'HARD',
-        template: 'Solve for x: 3x² - 12 = 0',
+        template: 'What is the minimum number of employees before written health and safety policy is required?',
         variables: '{}',
         solution: JSON.stringify({
-          correctAnswer: 'x = ±2',
-          wrongAnswers: ['x = ±4', 'x = 2', 'x = 4'],
-          explanation: '3x² = 12, x² = 4, therefore x = ±2.',
+          correctAnswer: '5 employees',
+          wrongAnswers: ['10 employees', '20 employees', '50 employees'],
+          explanation: 'Employers with 5 or more employees must have a written safety policy.',
         }),
-        tags: 'math,quadratics',
-        estimatedTime: 120,
-        examRelevance: true,
+        tags: 'safety,policy',
+      }
+    );
+
+    addProblemsForTopic('topic_047', 'Risk Assessment',
+      {
+        template: 'What is the first step in a risk assessment?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'Identify the hazards',
+          wrongAnswers: ['Implement controls', 'Review the assessment', 'Train employees'],
+          explanation: 'The first step is always to identify potential hazards.',
+        }),
+        tags: 'safety,risk',
       },
-    ];
+      {
+        template: 'What does the term "hazard" mean?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'Something with the potential to cause harm',
+          wrongAnswers: ['An accident that has happened', 'Safety equipment', 'A safety procedure'],
+          explanation: 'A hazard is anything with the potential to cause harm.',
+        }),
+        tags: 'safety,definitions',
+      },
+      {
+        template: 'How often should risk assessments be reviewed?',
+        variables: '{}',
+        solution: JSON.stringify({
+          correctAnswer: 'Regularly and when circumstances change',
+          wrongAnswers: ['Once a year only', 'Never, once completed', 'Every 5 years'],
+          explanation: 'Risk assessments should be reviewed regularly and whenever there are significant changes.',
+        }),
+        tags: 'safety,review',
+      }
+    );
 
-    problems.push(...engineeringProblems);
+    // Add generic problems for remaining topics
+    for (const topic of topics) {
+      const topicId = topic.id;
+      const topicName = topic.name;
 
-    // Add basic problems for other engineering topics
-    const remainingEngTopics = topics.filter(t => t.id.startsWith('topic_0') && !['topic_001', 'topic_002', 'topic_003'].includes(t.id));
-    for (const topic of remainingEngTopics) {
+      // Skip topics we've already added detailed problems for
+      const detailedTopics = ['topic_001', 'topic_004', 'topic_016', 'topic_018', 'topic_021', 'topic_024', 'topic_027', 'topic_046', 'topic_047'];
+      if (detailedTopics.includes(topicId)) continue;
+
       problems.push(
         {
-          topicId: topic.id,
+          topicId,
           type: 'MULTIPLE_CHOICE',
           difficulty: 'EASY',
-          template: `What is a key principle of ${topic.name}?`,
+          template: `What is a fundamental concept in ${topicName}?`,
           variables: '{}',
           solution: JSON.stringify({
-            correctAnswer: 'Understanding fundamental concepts',
-            wrongAnswers: ['Ignoring safety procedures', 'Skipping planning stages', 'Avoiding calculations'],
-            explanation: `${topic.name} requires understanding of fundamental engineering principles.`,
+            correctAnswer: 'Understanding core principles',
+            wrongAnswers: ['Ignoring safety', 'Skipping procedures', 'Avoiding standards'],
+            explanation: `${topicName} requires solid understanding of fundamental concepts.`,
           }),
           tags: 'basics',
           estimatedTime: 60,
           examRelevance: true,
         },
         {
-          topicId: topic.id,
+          topicId,
           type: 'MULTIPLE_CHOICE',
           difficulty: 'MEDIUM',
-          template: `Which tool or method is commonly used in ${topic.name}?`,
+          template: `Which standard or practice applies to ${topicName}?`,
           variables: '{}',
           solution: JSON.stringify({
-            correctAnswer: 'Industry-standard practices',
-            wrongAnswers: ['Random guessing', 'Unreliable methods', 'Outdated techniques'],
-            explanation: `${topic.name} relies on proven industry-standard practices and methods.`,
-          }),
-          tags: 'intermediate',
-          estimatedTime: 90,
-          examRelevance: true,
-        },
-        {
-          topicId: topic.id,
-          type: 'MULTIPLE_CHOICE',
-          difficulty: 'HARD',
-          template: `What advanced concept applies to ${topic.name}?`,
-          variables: '{}',
-          solution: JSON.stringify({
-            correctAnswer: 'Systems thinking and analysis',
-            wrongAnswers: ['Ignoring variables', 'Single-factor analysis', 'Isolated thinking'],
-            explanation: `Advanced ${topic.name} requires systems thinking to understand interconnections.`,
-          }),
-          tags: 'advanced',
-          estimatedTime: 120,
-          examRelevance: true,
-        }
-      );
-    }
-
-    // Health & Social Care problems
-    const hscProblems = [
-      {
-        topicId: 'topic_101',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'EASY',
-        template: 'Which of the following is a core value in health and social care?',
-        variables: '{}',
-        solution: JSON.stringify({
-          correctAnswer: 'Dignity and respect',
-          wrongAnswers: ['Cost reduction', 'Speed of service', 'Standardization'],
-          explanation: 'Dignity and respect are fundamental values in health and social care.',
-        }),
-        tags: 'care-values,principles',
-        estimatedTime: 60,
-        examRelevance: true,
-      },
-      {
-        topicId: 'topic_102',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'MEDIUM',
-        template: 'What is the most important factor when communicating with a service user with hearing impairment?',
-        variables: '{}',
-        solution: JSON.stringify({
-          correctAnswer: 'Face the person and speak clearly',
-          wrongAnswers: ['Speak louder', 'Use complex vocabulary', 'Rush through the conversation'],
-          explanation: 'Facing the person allows them to read lips and see facial expressions.',
-        }),
-        tags: 'communication,accessibility',
-        estimatedTime: 90,
-        examRelevance: true,
-      },
-      {
-        topicId: 'topic_103',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'HARD',
-        template: 'In safeguarding, what does the term "whistleblowing" refer to?',
-        variables: '{}',
-        solution: JSON.stringify({
-          correctAnswer: 'Reporting concerns about poor practice or abuse',
-          wrongAnswers: ['Training new staff', 'Conducting health and safety checks', 'Organizing team meetings'],
-          explanation: 'Whistleblowing is the act of reporting malpractice or wrongdoing within an organization.',
-        }),
-        tags: 'safeguarding,professional-practice',
-        estimatedTime: 120,
-        examRelevance: true,
-      },
-    ];
-
-    problems.push(...hscProblems);
-
-    // Add basic problems for other HSC topics
-    const remainingHscTopics = topics.filter(t => t.id.startsWith('topic_1') && !['topic_101', 'topic_102', 'topic_103'].includes(t.id));
-    for (const topic of remainingHscTopics) {
-      problems.push(
-        {
-          topicId: topic.id,
-          type: 'MULTIPLE_CHOICE',
-          difficulty: 'EASY',
-          template: `What is essential in ${topic.name}?`,
-          variables: '{}',
-          solution: JSON.stringify({
-            correctAnswer: 'Person-centred approach',
-            wrongAnswers: ['One-size-fits-all methods', 'Ignoring individual needs', 'Task-focused care'],
-            explanation: `${topic.name} requires a person-centred approach that respects individual needs.`,
-          }),
-          tags: 'care-practice',
-          estimatedTime: 60,
-          examRelevance: true,
-        },
-        {
-          topicId: topic.id,
-          type: 'MULTIPLE_CHOICE',
-          difficulty: 'MEDIUM',
-          template: `Which legislation is relevant to ${topic.name}?`,
-          variables: '{}',
-          solution: JSON.stringify({
-            correctAnswer: 'Health and Social Care Act',
-            wrongAnswers: ['Traffic Regulations', 'Building Codes', 'Copyright Law'],
-            explanation: `The Health and Social Care Act provides the legal framework for ${topic.name}.`,
-          }),
-          tags: 'legislation',
-          estimatedTime: 90,
-          examRelevance: true,
-        }
-      );
-    }
-
-    // Digital Production problems
-    const digitalProblems = [
-      {
-        topicId: 'topic_201',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'EASY',
-        template: 'Which of the following is a programming loop structure?',
-        variables: '{}',
-        solution: JSON.stringify({
-          correctAnswer: 'for loop',
-          wrongAnswers: ['function', 'variable', 'comment'],
-          explanation: 'A for loop is a control structure that repeats a block of code a specific number of times.',
-        }),
-        tags: 'programming,loops',
-        estimatedTime: 60,
-        examRelevance: true,
-      },
-      {
-        topicId: 'topic_202',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'MEDIUM',
-        template: 'Which data structure follows the Last In First Out (LIFO) principle?',
-        variables: '{}',
-        solution: JSON.stringify({
-          correctAnswer: 'Stack',
-          wrongAnswers: ['Queue', 'Array', 'Tree'],
-          explanation: 'A stack follows LIFO where the last element added is the first one removed.',
-        }),
-        tags: 'data-structures',
-        estimatedTime: 90,
-        examRelevance: true,
-      },
-      {
-        topicId: 'topic_203',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'MEDIUM',
-        template: 'Which HTML tag is used to create a hyperlink?',
-        variables: '{}',
-        solution: JSON.stringify({
-          correctAnswer: '<a>',
-          wrongAnswers: ['<link>', '<href>', '<url>'],
-          explanation: 'The <a> (anchor) tag is used to create hyperlinks in HTML.',
-        }),
-        tags: 'web-development,html',
-        estimatedTime: 60,
-        examRelevance: true,
-      },
-    ];
-
-    problems.push(...digitalProblems);
-
-    // Add basic problems for other digital topics
-    const remainingDigitalTopics = topics.filter(t => t.id.startsWith('topic_2') && !['topic_201', 'topic_202', 'topic_203'].includes(t.id));
-    for (const topic of remainingDigitalTopics) {
-      problems.push(
-        {
-          topicId: topic.id,
-          type: 'MULTIPLE_CHOICE',
-          difficulty: 'EASY',
-          template: `What is important in ${topic.name}?`,
-          variables: '{}',
-          solution: JSON.stringify({
-            correctAnswer: 'User experience and functionality',
-            wrongAnswers: ['Complexity', 'Technical jargon', 'Ignoring user feedback'],
-            explanation: `${topic.name} focuses on creating solutions that are both functional and user-friendly.`,
-          }),
-          tags: 'digital-practice',
-          estimatedTime: 60,
-          examRelevance: true,
-        },
-        {
-          topicId: topic.id,
-          type: 'MULTIPLE_CHOICE',
-          difficulty: 'MEDIUM',
-          template: `Which principle applies to ${topic.name}?`,
-          variables: '{}',
-          solution: JSON.stringify({
-            correctAnswer: 'Best practices and standards',
-            wrongAnswers: ['Random implementation', 'Outdated methods', 'Ignoring accessibility'],
-            explanation: `${topic.name} requires following industry best practices and standards.`,
+            correctAnswer: 'Industry best practices',
+            wrongAnswers: ['No standards apply', 'Outdated methods', 'Informal approaches'],
+            explanation: `${topicName} follows established industry standards and best practices.`,
           }),
           tags: 'standards',
           estimatedTime: 90,
           examRelevance: true,
-        }
-      );
-    }
-
-    // Education & Childcare problems
-    const educationProblems = [
-      {
-        topicId: 'topic_301',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'EASY',
-        template: 'At what age do most children typically start walking independently?',
-        variables: '{}',
-        solution: JSON.stringify({
-          correctAnswer: '12-15 months',
-          wrongAnswers: ['6-9 months', '18-24 months', '3-4 years'],
-          explanation: 'Most children begin walking independently between 12-15 months of age.',
-        }),
-        tags: 'development,milestones',
-        estimatedTime: 60,
-        examRelevance: true,
-      },
-      {
-        topicId: 'topic_302',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'MEDIUM',
-        template: 'Which type of play involves children playing alongside each other but not together?',
-        variables: '{}',
-        solution: JSON.stringify({
-          correctAnswer: 'Parallel play',
-          wrongAnswers: ['Cooperative play', 'Solitary play', 'Social play'],
-          explanation: 'Parallel play occurs when children play side by side with similar toys but without interaction.',
-        }),
-        tags: 'play,social-development',
-        estimatedTime: 90,
-        examRelevance: true,
-      },
-      {
-        topicId: 'topic_303',
-        type: 'MULTIPLE_CHOICE',
-        difficulty: 'HARD',
-        template: 'What is the main purpose of the DBS (Disclosure and Barring Service) check?',
-        variables: '{}',
-        solution: JSON.stringify({
-          correctAnswer: 'To check if individuals are suitable to work with children',
-          wrongAnswers: ['To verify qualifications', 'To check work experience', 'To assess teaching skills'],
-          explanation: 'DBS checks help prevent unsuitable people from working with vulnerable groups including children.',
-        }),
-        tags: 'safeguarding,legislation',
-        estimatedTime: 120,
-        examRelevance: true,
-      },
-    ];
-
-    problems.push(...educationProblems);
-
-    // Add basic problems for other education topics
-    const remainingEducationTopics = topics.filter(t => t.id.startsWith('topic_3') && !['topic_301', 'topic_302', 'topic_303'].includes(t.id));
-    for (const topic of remainingEducationTopics) {
-      problems.push(
-        {
-          topicId: topic.id,
-          type: 'MULTIPLE_CHOICE',
-          difficulty: 'EASY',
-          template: `What is key to ${topic.name}?`,
-          variables: '{}',
-          solution: JSON.stringify({
-            correctAnswer: 'Child-centred approach',
-            wrongAnswers: ['Adult-led activities only', 'Ignoring individual needs', 'Standardized methods'],
-            explanation: `${topic.name} requires putting children's needs and interests at the center of practice.`,
-          }),
-          tags: 'childcare-practice',
-          estimatedTime: 60,
-          examRelevance: true,
         },
         {
-          topicId: topic.id,
+          topicId,
           type: 'MULTIPLE_CHOICE',
-          difficulty: 'MEDIUM',
-          template: `Which framework guides ${topic.name}?`,
+          difficulty: 'HARD',
+          template: `What advanced skill is required in ${topicName}?`,
           variables: '{}',
           solution: JSON.stringify({
-            correctAnswer: 'EYFS (Early Years Foundation Stage)',
-            wrongAnswers: ['National Curriculum only', 'No specific framework', 'Adult education standards'],
-            explanation: `The EYFS provides the statutory framework for ${topic.name} in England.`,
+            correctAnswer: 'Critical analysis and problem solving',
+            wrongAnswers: ['Memorization only', 'Following instructions blindly', 'Avoiding complexity'],
+            explanation: `Advanced ${topicName} requires analytical thinking and problem-solving skills.`,
           }),
-          tags: 'frameworks',
-          estimatedTime: 90,
+          tags: 'advanced',
+          estimatedTime: 120,
           examRelevance: true,
         }
       );
@@ -603,11 +523,11 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      message: 'Complete database seeded with all subjects!',
+      message: 'Complete T-Level Engineering database seeded!',
       unitCount,
       topicCount,
       problemCount,
-      subjects: ['Engineering', 'Health & Social Care', 'Digital Production', 'Education & Childcare'],
+      units: units.map(u => u.name),
     });
   } catch (error: any) {
     return NextResponse.json(
