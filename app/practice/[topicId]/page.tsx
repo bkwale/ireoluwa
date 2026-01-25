@@ -228,15 +228,13 @@ export default function PracticePage() {
                   >
                     {submitting ? 'Submitting...' : 'Submit Answer'}
                   </Button>
-                  {problem.explanation && (
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowSteps(!showSteps)}
-                      className="border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-semibold py-6"
-                    >
-                      {showSteps ? 'Hide' : 'Show'} Hint
-                    </Button>
-                  )}
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowSteps(!showSteps)}
+                    className="border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-semibold py-6"
+                  >
+                    {showSteps ? 'Hide' : 'Show'} Hint
+                  </Button>
                 </div>
               </div>
             )}
@@ -282,9 +280,21 @@ export default function PracticePage() {
               </div>
             )}
 
-            {/* Solution Steps */}
-            {showSteps && problem.steps.length > 0 && (
+            {/* Hint/Explanation */}
+            {showSteps && problem.explanation && !showResult && (
               <Card className="bg-blue-50 border-2 border-blue-300">
+                <CardHeader className="bg-blue-100">
+                  <CardTitle className="text-lg text-gray-900">Hint</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <p className="text-base text-gray-900">{problem.explanation}</p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Solution Steps for calculation problems */}
+            {showSteps && problem.steps && problem.steps.length > 0 && (
+              <Card className="bg-blue-50 border-2 border-blue-300 mt-4">
                 <CardHeader className="bg-blue-100">
                   <CardTitle className="text-lg text-gray-900">Solution Steps</CardTitle>
                 </CardHeader>
