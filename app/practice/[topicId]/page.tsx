@@ -33,22 +33,29 @@ export default function PracticePage() {
   const [submitting, setSubmitting] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
   const [showSteps, setShowSteps] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState(0);
 
   useEffect(() => {
     loadProblem();
   }, [topicId]);
 
-  // Timer effect
+  // Countdown timer effect
   useEffect(() => {
-    if (loading || showResult) return;
+    if (loading || showResult || !problem) return;
+
+    // Set initial countdown time based on estimated time (convert minutes to seconds)
+    const initialTime = problem.estimatedTime;
+    setTimeRemaining(initialTime);
 
     const interval = setInterval(() => {
-      setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+      setTimeRemaining(prev => {
+        if (prev <= 0) return 0;
+        return prev - 1;
+      });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startTime, loading, showResult]);
+  }, [problem, loading, showResult]);
 
   const loadProblem = async () => {
     try {
@@ -161,11 +168,19 @@ export default function PracticePage() {
             </p>
           </div>
           <div className="flex items-center gap-4">
-            {/* Timer */}
-            <div className="bg-white px-4 py-2 rounded-lg border-2 border-blue-200">
-              <div className="text-xs font-semibold text-gray-600">Time</div>
-              <div className="text-2xl font-bold text-blue-700">
-                {Math.floor(elapsedTime / 60)}:{(elapsedTime % 60).toString().padStart(2, '0')}
+            {/* Countdown Timer */}
+            <div className={`px-6 py-3 rounded-lg border-2 ${
+              timeRemaining <= 10 ? 'bg-red-100 border-red-400 animate-pulse' :
+              timeRemaining <= 30 ? 'bg-yellow-100 border-yellow-400' :
+              'bg-white border-blue-200'
+            }`}>
+              <div className="text-xs font-semibold text-gray-600 text-center">TIME LEFT</div>
+              <div className={`text-3xl font-bold text-center ${
+                timeRemaining <= 10 ? 'text-red-700' :
+                timeRemaining <= 30 ? 'text-yellow-700' :
+                'text-blue-700'
+              }`}>
+                {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, '0')}
               </div>
             </div>
             <Button
