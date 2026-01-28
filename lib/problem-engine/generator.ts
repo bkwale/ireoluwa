@@ -9,6 +9,7 @@ export interface GeneratedProblem {
   difficulty: string;
   estimatedTime: number;
   explanation?: string;
+  diagram?: string;
 }
 
 export interface SolutionStep {
@@ -42,6 +43,7 @@ export function generateProblem(problem: any): GeneratedProblem {
       difficulty: problem.difficulty,
       estimatedTime: problem.estimatedTime,
       explanation: solution.explanation,
+      diagram: solution.diagram,
     };
   }
 
@@ -89,6 +91,7 @@ export function generateProblem(problem: any): GeneratedProblem {
     difficulty: problem.difficulty,
     estimatedTime: problem.estimatedTime,
     explanation: solution.explanation,
+    diagram: solution.diagram,
   };
 }
 

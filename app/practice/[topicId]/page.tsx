@@ -17,6 +17,7 @@ interface GeneratedProblem {
   difficulty: string;
   estimatedTime: number;
   explanation?: string;
+  diagram?: string;
 }
 
 export default function PracticePage() {
@@ -32,10 +33,22 @@ export default function PracticePage() {
   const [submitting, setSubmitting] = useState(false);
   const [startTime, setStartTime] = useState(Date.now());
   const [showSteps, setShowSteps] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
     loadProblem();
   }, [topicId]);
+
+  // Timer effect
+  useEffect(() => {
+    if (loading || showResult) return;
+
+    const interval = setInterval(() => {
+      setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime, loading, showResult]);
 
   const loadProblem = async () => {
     try {
@@ -147,13 +160,22 @@ export default function PracticePage() {
               Difficulty: {problem.difficulty} • Est. {problem.estimatedTime} min
             </p>
           </div>
-          <Button
-            variant="outline"
-            onClick={handleBackToDashboard}
-            className="bg-white text-blue-700 hover:bg-blue-50 border-2 border-white font-semibold"
-          >
-            Back to Dashboard
-          </Button>
+          <div className="flex items-center gap-4">
+            {/* Timer */}
+            <div className="bg-white px-4 py-2 rounded-lg border-2 border-blue-200">
+              <div className="text-xs font-semibold text-gray-600">Time</div>
+              <div className="text-2xl font-bold text-blue-700">
+                {Math.floor(elapsedTime / 60)}:{(elapsedTime % 60).toString().padStart(2, '0')}
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              onClick={handleBackToDashboard}
+              className="bg-white text-blue-700 hover:bg-blue-50 border-2 border-white font-semibold"
+            >
+              Back to Dashboard
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -168,6 +190,16 @@ export default function PracticePage() {
             <div className="text-xl font-semibold leading-relaxed text-gray-900 bg-white p-6 rounded-lg border-2 border-blue-200">
               {problem.question}
             </div>
+
+            {/* Diagram */}
+            {problem.diagram && (
+              <div className="bg-gray-50 p-6 rounded-lg border-2 border-gray-300">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">Diagram:</h3>
+                <pre className="font-mono text-sm leading-relaxed text-gray-800 overflow-x-auto">
+                  {problem.diagram}
+                </pre>
+              </div>
+            )}
 
             {/* Answer Input */}
             {!showResult && (
