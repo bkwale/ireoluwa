@@ -93,6 +93,45 @@ export default function DashboardPage() {
           <p className="text-lg text-gray-600">Choose a topic to start practicing</p>
         </div>
 
+        {/* Quick Action Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <Card className="border-2 border-blue-400 hover:shadow-lg transition-all cursor-pointer" onClick={() => router.push('/stats')}>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3">
+                <div className="text-4xl">📊</div>
+                <div>
+                  <h3 className="font-bold text-gray-900">Performance Stats</h3>
+                  <p className="text-sm text-gray-600">View your progress and weak areas</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-green-400 hover:shadow-lg transition-all cursor-pointer" onClick={() => router.push('/formulas')}>
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3">
+                <div className="text-4xl">📐</div>
+                <div>
+                  <h3 className="font-bold text-gray-900">Formula Reference</h3>
+                  <p className="text-sm text-gray-600">Quick access to all formulas</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-orange-400 hover:shadow-lg transition-all cursor-pointer">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-3">
+                <div className="text-4xl">🎯</div>
+                <div>
+                  <h3 className="font-bold text-gray-900">Practice Modes</h3>
+                  <p className="text-sm text-gray-600">Timed, weak areas, review</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {units.length === 0 && (
           <div className="text-center py-12">
             <p className="text-xl text-gray-500">No topics available yet. Please contact your guardian.</p>
