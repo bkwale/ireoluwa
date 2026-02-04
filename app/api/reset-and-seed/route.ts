@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 
 /**
- * Complete database reset and seed
+ * Complete database reset and seed - v2
  * This route:
  * 1. Deletes all existing data
  * 2. Creates users
@@ -13,7 +13,7 @@ import bcrypt from 'bcryptjs';
  */
 export async function GET() {
   try {
-    console.log('Starting complete database reset and seed...');
+    console.log('Starting complete database reset and seed v2...');
 
     // Step 1: Delete all existing data (in correct order to avoid foreign key constraints)
     console.log('Deleting existing data...');
