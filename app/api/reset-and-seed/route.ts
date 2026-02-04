@@ -15,7 +15,7 @@ export async function GET() {
   try {
     console.log('Starting complete database reset and seed...');
 
-    // Step 1: Delete all existing data
+    // Step 1: Delete all existing data (in correct order to avoid foreign key constraints)
     console.log('Deleting existing data...');
     await prisma.problemAttempt.deleteMany({});
     await prisma.progress.deleteMany({});
@@ -24,7 +24,18 @@ export async function GET() {
     await prisma.subtopic.deleteMany({});
     await prisma.topic.deleteMany({});
     await prisma.unit.deleteMany({});
-    await prisma.user.deleteMany({});
+
+    // Delete users carefully to avoid unique constraint errors
+    await prisma.user.deleteMany({
+      where: {
+        OR: [
+          { username: 'ireoluwa' },
+          { username: 'admin' },
+          { email: '[email protected]' },
+          { email: '[email protected]' },
+        ],
+      },
+    });
 
     // Step 2: Create users
     console.log('Creating users...');
