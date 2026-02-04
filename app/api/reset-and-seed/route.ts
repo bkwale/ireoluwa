@@ -25,25 +25,20 @@ export async function GET() {
     await prisma.topic.deleteMany({});
     await prisma.unit.deleteMany({});
 
-    // Delete users carefully to avoid unique constraint errors
-    await prisma.user.deleteMany({
-      where: {
-        OR: [
-          { username: 'ireoluwa' },
-          { username: 'admin' },
-          { email: '[email protected]' },
-          { email: '[email protected]' },
-        ],
-      },
-    });
-
-    // Step 2: Create users
-    console.log('Creating users...');
+    // Step 2: Upsert users (update if exists, create if not)
+    console.log('Creating/updating users...');
     const studentPassword = await bcrypt.hash('student123', 10);
     const guardianPassword = await bcrypt.hash('guardian123', 10);
 
-    await prisma.user.create({
-      data: {
+    await prisma.user.upsert({
+      where: { username: 'ireoluwa' },
+      update: {
+        email: '[email protected]',
+        name: 'Ireoluwa',
+        passwordHash: studentPassword,
+        role: 'STUDENT',
+      },
+      create: {
         username: 'ireoluwa',
         email: '[email protected]',
         name: 'Ireoluwa',
@@ -52,8 +47,15 @@ export async function GET() {
       },
     });
 
-    await prisma.user.create({
-      data: {
+    await prisma.user.upsert({
+      where: { username: 'admin' },
+      update: {
+        email: '[email protected]',
+        name: 'Guardian',
+        passwordHash: guardianPassword,
+        role: 'GUARDIAN',
+      },
+      create: {
         username: 'admin',
         email: '[email protected]',
         name: 'Guardian',
