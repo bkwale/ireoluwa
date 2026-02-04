@@ -25,20 +25,46 @@ export async function GET() {
     await prisma.topic.deleteMany({});
     await prisma.unit.deleteMany({});
 
-    // Step 2: Upsert users (update if exists, create if not)
-    console.log('Creating/updating users...');
+    // Step 2: Delete and recreate users to avoid unique constraint issues
+    console.log('Recreating users...');
+
+    // First, delete any existing users with these usernames or emails
+    const existingUsers = await prisma.user.findMany({
+      where: {
+        OR: [
+          { username: 'ireoluwa' },
+          { username: 'admin' },
+          { email: '[email protected]' },
+          { email: '[email protected]' },
+        ],
+      },
+    });
+
+    // Delete their related data first
+    for (const user of existingUsers) {
+      await prisma.problemAttempt.deleteMany({ where: { userId: user.id } });
+      await prisma.progress.deleteMany({ where: { userId: user.id } });
+      await prisma.studySession.deleteMany({ where: { userId: user.id } });
+    }
+
+    // Now delete the users
+    await prisma.user.deleteMany({
+      where: {
+        OR: [
+          { username: 'ireoluwa' },
+          { username: 'admin' },
+          { email: '[email protected]' },
+          { email: '[email protected]' },
+        ],
+      },
+    });
+
+    // Create fresh users
     const studentPassword = await bcrypt.hash('student123', 10);
     const guardianPassword = await bcrypt.hash('guardian123', 10);
 
-    await prisma.user.upsert({
-      where: { username: 'ireoluwa' },
-      update: {
-        email: '[email protected]',
-        name: 'Ireoluwa',
-        passwordHash: studentPassword,
-        role: 'STUDENT',
-      },
-      create: {
+    await prisma.user.create({
+      data: {
         username: 'ireoluwa',
         email: '[email protected]',
         name: 'Ireoluwa',
@@ -47,15 +73,8 @@ export async function GET() {
       },
     });
 
-    await prisma.user.upsert({
-      where: { username: 'admin' },
-      update: {
-        email: '[email protected]',
-        name: 'Guardian',
-        passwordHash: guardianPassword,
-        role: 'GUARDIAN',
-      },
-      create: {
+    await prisma.user.create({
+      data: {
         username: 'admin',
         email: '[email protected]',
         name: 'Guardian',
