@@ -15,51 +15,27 @@ export async function GET() {
   try {
     console.log('Starting complete database reset and seed v2...');
 
-    // Step 1: Delete all existing data (in correct order to avoid foreign key constraints)
-    console.log('Deleting existing data...');
+    // Step 1: Delete ALL data in correct order to avoid foreign key violations
+    console.log('Deleting all existing data...');
+
+    // Delete all user-related data first
     await prisma.problemAttempt.deleteMany({});
     await prisma.progress.deleteMany({});
     await prisma.studySession.deleteMany({});
+
+    // Delete all content
     await prisma.problem.deleteMany({});
     await prisma.subtopic.deleteMany({});
     await prisma.topic.deleteMany({});
     await prisma.unit.deleteMany({});
 
-    // Step 2: Delete and recreate users to avoid unique constraint issues
-    console.log('Recreating users...');
+    // Finally delete ALL users (no conditions)
+    await prisma.user.deleteMany({});
 
-    // First, delete any existing users with these usernames or emails
-    const existingUsers = await prisma.user.findMany({
-      where: {
-        OR: [
-          { username: 'ireoluwa' },
-          { username: 'admin' },
-          { email: '[email protected]' },
-          { email: '[email protected]' },
-        ],
-      },
-    });
+    console.log('All data deleted successfully');
 
-    // Delete their related data first
-    for (const user of existingUsers) {
-      await prisma.problemAttempt.deleteMany({ where: { userId: user.id } });
-      await prisma.progress.deleteMany({ where: { userId: user.id } });
-      await prisma.studySession.deleteMany({ where: { userId: user.id } });
-    }
-
-    // Now delete the users
-    await prisma.user.deleteMany({
-      where: {
-        OR: [
-          { username: 'ireoluwa' },
-          { username: 'admin' },
-          { email: '[email protected]' },
-          { email: '[email protected]' },
-        ],
-      },
-    });
-
-    // Create fresh users
+    // Step 2: Create fresh users
+    console.log('Creating users...');
     const studentPassword = await bcrypt.hash('student123', 10);
     const guardianPassword = await bcrypt.hash('guardian123', 10);
 
