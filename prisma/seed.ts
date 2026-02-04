@@ -62,6 +62,15 @@ async function main() {
     },
   });
 
+  const unit7 = await prisma.unit.create({
+    data: {
+      code: 'UNIT_7',
+      name: 'English Language',
+      description: 'Reading comprehension, grammar, vocabulary, writing techniques, spelling',
+      order: 7,
+    },
+  });
+
   console.log('Created units');
 
   // Create Topics for Unit 4
@@ -123,6 +132,26 @@ async function main() {
       data: {
         ...topic,
         unitId: unit6.id,
+        difficulty: 'INTERMEDIATE',
+      },
+    });
+  }
+
+  // Create Topics for Unit 7 - English Language
+  const topics7 = [
+    { name: 'Reading Comprehension', description: 'Understanding texts, identifying main ideas and inferences', order: 1 },
+    { name: 'Grammar & Punctuation', description: 'Sentence structure, verb tenses, punctuation rules', order: 2 },
+    { name: 'Vocabulary', description: 'Word meanings, synonyms, antonyms, context clues', order: 3 },
+    { name: 'Writing Techniques', description: 'Persuasive writing, literary devices, tone and style', order: 4 },
+    { name: 'Spelling', description: 'Common spelling rules, homophones, frequently misspelled words', order: 5 },
+    { name: 'Sentence Construction', description: 'Building effective sentences, avoiding fragments and run-ons', order: 6 },
+  ];
+
+  for (const topic of topics7) {
+    await prisma.topic.create({
+      data: {
+        ...topic,
+        unitId: unit7.id,
         difficulty: 'INTERMEDIATE',
       },
     });
